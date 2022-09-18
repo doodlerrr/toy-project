@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        @media screen and (min-width: 700px) {
+            * {
+            background-color : gainsboro;
+            width : 100%
+        }
+        .top {
+            background-color : white;
+            width: 95%;
+            max-width: 700px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px darkgrey;
+            margin: 20px auto;
+        }
+        .product-description {
+            background-color : lavender;
+            width : 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            border-radius: 20px;
+            padding: 1%;
+        }
+        .comments {
+            background-color: white;
+        }
+        }
+      @media screen and (max-width: 700px) {
+          .top {
+            background-color : white;
+            width: 95%;
+            max-width: 700px;
+            padding: 20px;
+            box-shadow: 0px 0px 10px 0px darkgrey;
+            margin: 20px auto;
+        }
+        .product-description {
+            background-color: lavender;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+
+            justify-content: space-between;
+            border-radius: 20px;
+            padding: 1%;
+        }
+      }
+    </style>
+</head>
+<body>
+<div class = "top">
+    <div class = "product-description">
+        <br>
+        <img src="{{result.img}}" class="card-img-top" alt="..." style="height : 435px; object-fit: cover;">
+
+        <h2 style="background-color: transparent">💐 {{result.name}}</h2>
+        <p style="margin-left: 5%; background-color: transparent"><b>브랜드 명 ❊</b><br>{{result.brand}}</p>
+        <p style="margin-left: 5%; background-color: transparent"> <b>향수 한 줄 설명 ❊</b><br>{{result.desc}} </p>
+    </div>
+
+    <div class = "comments">
+        <div class = "write-comments">
+            <form id="commentForm" name="commentForm" action="{{url_for('comment_write')}}" method="POST">
+                <input type="hidden" name="root_idx" value="{{result._id}}">
+                <div style="background-color: white">
+                    <span><strong style="background-color: white"><br>당신의 한 줄평을 입력해주세요</strong></span> <span id="cCnt"></span>
+                    <table class = "table" style="background-color: white">
+                        <tr style="background-color: white">
+                            <td style="background-color: white"><textarea rows="3" cols="45" id="comment" name="comment" placeholder="여기에 향수 사용 후기를 입력해주세요" style="background-color: white"></textarea></td>
+                            <td><input type="submit" class="btn btn-success" style="height:57px;color:white;background-color: darkslateblue" value="등록하기"></td>
+                        </tr>
+                    </table>
+                </div>
+            </form>
+
+
+                            <table style="background-color: white; width : 100%">
+                                <tbody>
+                                {% if comments|length > 0 %}
+                                    {% for c in comments %}
+                                    <tr>
+                                        <td style="background-color: white"><p style="background-color: white">{{c.comment}}</p></td>
+                                        <td style="background-color: white"><input type="submit" value="삭제" style = "height:45px; background-color: red; color: white"></td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endif%}
+                                </tbody>
+                            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>
