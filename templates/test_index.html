@@ -1,0 +1,240 @@
+<!--토이 프로젝트 : 나만의 향을 보관하는 사이트 : Fragrance-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+      <title>Fragrance: 향 보관소</title>
+      <style>
+          h1 {
+              font: bold 3.625em/0.9 "League Gothic", "Arial Narrow", "Arial, sans-serif";
+              margin-left: 10% ;
+          }
+          h2 {
+              margin-left : 10%;
+          }
+          .card .heart {
+              font-size: 150%;
+              position: relative;
+              top: -50px;
+              left: 85%;
+          }
+          @media screen and (min-width: 700px) {
+              .badge-group {
+                  width : 100%;
+                  height : 100%;
+              }
+              .badge {
+                  font-size: 90%;
+                  padding: 1%;
+                  margin: .2%;
+              }
+              .card-group {
+                  margin : .2em 10em;
+              }
+               .pagenation-top {
+                   margin-top: .5%;
+                   margin-left : 37%;
+               }
+               .card > img {
+              width : auto;
+              height : auto;
+          }
+          }
+          @media screen and (max-width: 700px) {
+
+              h1 {
+                  font: bold 3.625em/0.9 "League Gothic", "Arial Narrow", "Arial, sans-serif";
+                  margin-left : auto;
+              }
+              h2 {
+                  margin-left : 1%;
+              }
+              .badge-group {
+                  width : 100%;
+                  height : 100%;
+              }
+              .badge {
+                  font-size: 90%;
+                  padding: 1%;
+              }
+              .card-group {
+                  margin : .2em;
+              }
+              .pagenation-top {
+                  margin-top: .5%;
+                  margin-left : auto;
+                  margin-right : auto;
+              }
+              .card > img {
+              height : 200px; object-fit: fill;
+          }
+          }
+      </style>
+      <script>
+          $(document).ready(function () {
+              get_like();
+          });
+          function get_like() {
+              $.ajax({
+                  url: "/perfume",
+                  type: "GET",
+                  success: function(response) {
+                      let rows = response['perfumes'];
+                      for (let i = 0; i < rows.length; i++) {
+                          let like = rows[i]['like']
+                          let temp_html = ``
+                          if(like == 0) {
+                              temp_html = `<span class="heartBtn" onclick="addLike(${like})"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg>
+                                                </span>`
+                          } else if(like == 1) {
+                              temp_html = `<div class="heartBtn" onclick="removeLike(${like})"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                                                </div>`
+                          }
+                          $('#heart-space').append(temp_html)
+                      }
+
+                      }
+              })
+          }
+
+          function addLike(like) {
+              $.ajax({
+                  type: "POST",
+                  url: "/perfume/like",
+                  data: {id_give: like},
+                  success: function() {
+                      window.location.reload()
+                  }
+              });
+          }
+
+          function removeLike(like) {
+              $.ajax({
+                  type: "POST",
+                  url: "/perfume/nolike",
+                  data: {id_give : like},
+                  success: function () {
+                      window.location.reload();
+                  }
+              })
+
+          }
+
+      </script>
+  </head>
+  <body>
+    <br/>
+    <br/>
+    <h1>&nbspFragrance.</h1>
+    <br/>
+    <br/>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+
+    <!--향수 목록 띄우기-->
+    <h2>🌼  브랜드별 향수 모아보기</h2>
+    <div class="card-group">
+        <div class="badge-group">
+            <span class="badge rounded-pill bg-dark">랑방</span>
+            <span class="badge rounded-pill bg-dark">포맨트</span>
+            <span class="badge rounded-pill bg-dark">아리아나그란데</span>
+            <span class="badge rounded-pill bg-dark">입생로랑</span>
+            <span class="badge rounded-pill bg-dark">산타마리아노벨라</span>
+            <span class="badge rounded-pill bg-dark">조말론</span>
+            <span class="badge rounded-pill bg-dark">메종마르지엘라</span>
+            <span class="badge rounded-pill bg-dark">디올</span>
+            <span class="badge rounded-pill bg-dark">에르메스</span>
+            <span class="badge rounded-pill bg-dark">아이젠버그</span>
+            <span class="badge rounded-pill bg-dark">톰포드</span>
+            <span class="badge rounded-pill bg-dark">세르주루텐</span>
+            <span class="badge rounded-pill bg-dark">킬리안</span>
+            <span class="badge rounded-pill bg-dark">바이레도</span>
+            <span class="badge rounded-pill bg-dark">구찌</span>
+            <span class="badge rounded-pill bg-dark">돌체앤가바나</span>
+            <span class="badge rounded-pill bg-dark">디올</span>
+            <span class="badge rounded-pill bg-dark">미우미우</span>
+            <span class="badge rounded-pill bg-dark">몽클레드</span>
+            <span class="badge rounded-pill bg-dark">르페르소나</span>
+            <span class="badge rounded-pill bg-secondary">전체보기</span>
+        </div>
+        <!--전체 향수 모아보기 구간-->
+        {% if datas|length > 0 %}
+        <div class="row row-cols-2" id="product-list">
+            {% for data in datas %}
+            <div class="card">
+                <img src="{{data['img']}}" class="card-img-top" alt="...">
+                <!--하트 누르기 기능-->
+                <div id="heart-space">
+                    <span class="heartBtn" onclick="addLike(${like})"><svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M0 0h24v24H0z" fill="none"/><path d="M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42 3 2 5.42 2 8.5c0 3.78 3.4 6.86 8.55 11.54L12 21.35l1.45-1.32C18.6 15.36 22 12.28 22 8.5 22 5.42 19.58 3 16.5 3zm-4.4 15.55l-.1.1-.1-.1C7.14 14.24 4 11.39 4 8.5 4 6.5 5.5 5 7.5 5c1.54 0 3.04.99 3.57 2.36h1.87C13.46 5.99 14.96 5 16.5 5c2 0 3.5 1.5 3.5 3.5 0 2.89-3.14 5.74-7.9 10.05z"/></svg></span>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title"><a href="{{url_for('view_perfume', product=data['_id'])}}">{{data['name']}}</a></h5>
+                    <p class="card-text">{{data['desc']}}</p>
+                    <p class="card-text"><small class="text-muted">{{data['brand']}}</small></p>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <h3> 데이터가 없어요 </h3>
+        </div>
+        {% endif %}
+        <!--페이지네이션-->
+        <div class="pagenation-top">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    {% if block_start - 1 > 0 %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{url_for('home', page = block_start - 1)}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="page-item">
+                        <a class="page-link" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {% endif %}
+
+                    {% for i in range(block_start, block_last + 1) %}
+                        {% if i > last_page_num %}
+                        {% else %}
+                            {% if i == page %}
+                                <li class="page-item"><a class="page-link" style="background-color: gainsboro"><b>{{ i }}</b></a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="{{url_for('home', page = i)}}">{{ i }}</a></li>
+                            {% endif%}
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if block_last < last_page_num %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{url_for('home', page = block_last + 1)}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {% endif%}
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!--찜한 향수 모아보기-->
+    <br/>
+    <h2>찜한 향수 모아보기</h2>
+    <br/>
+    <div class="card-group">
+        <div class="row row-cols-6">
+            <div class="card">
+                <img src="..." class="card-img" alt="...">
+            </div>
+        </div>
+    </div>
+  </body>
+</html>
+
